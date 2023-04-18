@@ -1,61 +1,136 @@
-/* eslint-disable @next/next/no-img-element */
-import About from 'components/About';
-import ContactMe from 'components/ContactMe';
-import Header from 'components/Header';
-import Hero from 'components/Hero';
-import Projects from 'components/Projects';
-import Skills from 'components/Skills';
-import WorkExperience from 'components/WorkExperience';
-import Head from 'next/head';
-import Link from 'next/link';
+import { GetStaticProps } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import Header from "../components/Header";
+import Hero from "../components/Hero";
+import styles from "../styles/Home.module.css";
+import { Experience, PageInfo, Skill, Project, Social } from "../typings";
+import { fetchPageInfo } from "../utils/fetchPageInfo";
+import { fetchExperiences } from "../utils/fetchExperience";
+import { fetchProjects } from "../utils/fetchProjects";
+import { fetchSkills } from "../utils/fetchSkills";
+import { fetchSocials } from "../utils/fetchSocials";
+import About from "../components/About";
+import WorkExperience from "../components/WorkExperience";
+import Skills from "../components/Skills";
+import Projects from "../components/Projects";
+import ContactMe from "../components/ContactMe";
+import Link from "next/link";
+import { HomeIcon } from "@heroicons/react/24/solid";
+import Script from "next/script";
 
-/* eslint-disable react/no-unescaped-entities */
-export default function Home() {
+type Props = {
+  pageInfo: PageInfo;
+  experiences: Experience[];
+  skills: Skill[];
+  projects: Project[];
+  socials: Social[];
+};
+
+const Home = ({ pageInfo, experiences, projects, skills, socials }: Props) => {
   return (
-    <div className='bg-[rgb(36,36,36)] scale-100 m-auto text-white h-screen snap-y snap-mandatory overflow-scroll z-0 scrollbar scrollbar-track-gray-400/20 object-fit scrollbar-thumb-[#f7ab0a]/80'>
-
+    <div
+      className="bg-lightBackground text-darkBlack h-screen snap-y snap-mandatory
+    overflow-y-scroll overflow-x-hidden z-0 scrollbar-thin scrollbar-track-gray-400/20 scrollbar-thumb-darkGreen/80"
+    >
       <Head>
-        <title>Amit&apos;s Portfolio</title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <title>{pageInfo.name} - Portfolio</title>
       </Head>
 
-      <Header />
+      {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-LV1LN9VBT0"
+        strategy="afterInteractive"
+      ></Script>
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+           function gtag(){dataLayer.push(arguments);}
+           gtag('js', new Date());
+           gtag('config', 'G-LV1LN9VBT0')`}
+        ;
+      </Script>
 
-      <section id='hero' className='snap-start'>
-        <Hero />
+      {/* Header */}
+      <Header socials={socials} />
+
+      {/* Hero */}
+      <section id="hero" className="snap-start">
+        <Hero pageInfo={pageInfo} />
       </section>
 
-      <section id='about' className='snap-center'>
-        <About />
+      {/* About */}
+      <section id="about" className="snap-center">
+        <About pageInfo={pageInfo} />
       </section>
 
-      <section id='experience' className='snap-center '>
-        <WorkExperience />
+      {/* Experiences */}
+      <section id="experience" className="snap-center">
+        <WorkExperience experiences={experiences} />
       </section>
 
-      <section id='skills' className='snap-start'>
-        <Skills />
+      {/* Skills */}
+      <section id="skills" className="snap-start">
+        <Skills skills={skills} />
       </section>
 
-      <section className="snap-start" id="projects">
-        <Projects />
+      {/* Projects */}
+      <section id="projects" className="snap-start">
+        <Projects projects={projects} />
       </section>
 
-      <section className="snap-start" id="contact">
+      {/* Contact */}
+      <section id="contact" className="snap-start">
         <ContactMe />
       </section>
 
       <Link href="#hero">
         <footer className="sticky bottom-5 w-full cursor-pointer">
           <div className="flex items-center justify-center">
-            <img
-              className="w-10 h-10 rounded-full filter grayscale hover:grayscale-0 cursor-pointer"
-              src="/scroll.jpg"
-              alt="Scroll to top"
-            />
+            <div className="h-10 w-10 bg-darkGreen/80 rounded-full flex items-center justify-center">
+              <HomeIcon className="h-7 w-17 pb-0.5 hover:grayscale-100 text-white animate-pulse" />
+            </div>
           </div>
         </footer>
       </Link>
-
     </div>
   );
-}
+};
+
+export default Home;
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const pageInfo = await fetchPageInfo();
+  const experiences = await fetchExperiences();
+  const skills = await fetchSkills();
+  const projects = await fetchProjects();
+  const socials = await fetchSocials();
+
+  return {
+    props: {
+      pageInfo,
+      experiences,
+      skills,
+      projects,
+      socials,
+    },
+    revalidate: 10,
+  };
+};

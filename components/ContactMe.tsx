@@ -13,7 +13,7 @@ const ContactMe: FC = () => {
     const { register, handleSubmit } = useForm<IInputs>();
 
     const onSubmit: SubmitHandler<IInputs> = (formData: any) => {
-        window.location.href = `mailto:amitparmar901@gmail.com?subject=${formData.subject}&body=Hi, my name is ${formData.name}. ${formData.message} (${formData.email})`;
+        window.location.href = `mailto:priyankbagad@gmail.com?subject=${formData.subject}&body=Hi, my name is ${formData.name}. ${formData.message} (${formData.email})`;
     };
 
     return (
@@ -29,15 +29,15 @@ const ContactMe: FC = () => {
                 <div className="space-y-10">
                     <div className="flex items-center space-x-5 justify-center">
                         <PhoneIcon className="text-[#f7ab0a] h-7	w-7	animate-pulse" />
-                        <p className="text-2xl">+91919199919191</p>
+                        <p className="text-2xl">+91 8097 26 1213</p>
                     </div>
                     <div className="flex items-center space-x-5 justify-center">
                         <EnvelopeIcon className="text-[#f7ab0a] h-7	w-7	animate-pulse" />
-                        <p className="text-2xl">amitparmar901@gmail.com</p>
+                        <p className="text-2xl">priyankbagad@gmail.com</p>
                     </div>
                     <div className="flex items-center space-x-5 justify-center">
                         <MapPinIcon className="text-[#f7ab0a] h-7	w-7	animate-pulse" />
-                        <p className="text-2xl">Savarkundla, Saurashtra, Gujarat</p>
+                        <p className="text-2xl">Tardeo, Mumbai, Maharashtra</p>
                     </div>
                 </div>
                 <form
